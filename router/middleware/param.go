@@ -12,7 +12,7 @@ import (
 )
 
 type ParamError struct {
-	Field   string      `json:"filed"`
+	Field   string      `json:"field"`
 	Value   interface{} `json:"value"`
 	Message string      `json:"message"`
 }
@@ -20,7 +20,7 @@ type ParamError struct {
 type ParamErrors []*ParamError
 
 func (pe *ParamError) String() string {
-	return Fstring("filed-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
+	return Fstring("field-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
 }
 
 func (pe *ParamError) Error() string {
