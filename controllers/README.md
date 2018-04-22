@@ -1,8 +1,17 @@
 ## gweb.controllers
 
+Necessary Condition:
+
+* 1. Fn prototype `Fn(req *reqType) *respType`
+* 2. Add Fn to Route, like this:
+```golang
+# file: router.router.go, func: RegisterHandler
+addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
+```
+* 3. var **`PoolOfReqType`** and **`PoolOfRespType`** ** in type **`Sync.Pool`**
+
 ### Get Method
 
-Code:
 ```golang
 type HelloGetForm struct {
 	Name string `schema:"name" valid:"Required" json:"name"`
@@ -33,7 +42,6 @@ func HelloGet(req *HelloGetForm) *HelloGetResp {
 
 ### Post Method
 
-Code:
 ```golang
 type HelloPostForm struct {
 	Name string `schema:"name" valid:"Required" json:"name"`

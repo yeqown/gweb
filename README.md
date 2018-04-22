@@ -4,7 +4,7 @@ golang web frame, maybe a frame ~, mainly to less preparing-works while starting
 
 * [Using](#using)
 * [Validation](#validation)
-* [Decodeer](#decodeer)
+* [Decoder](#decoder)
 
 ## using
 
@@ -18,6 +18,8 @@ gvt restore # if not installed, go get github.com/FiloSottile/gvt
 cd mainC
 go run *
 ```
+
+Link to [demo](https://github.com/yeqown/gweb/tree/master/controllers)
 
 ## validation
 
