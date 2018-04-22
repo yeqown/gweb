@@ -73,15 +73,15 @@ Found:
 		middleware.ResponseErrorJson(w, je)
 		return
 	}
-	params := make([]reflect.Value, 1)
-	params[0] = reflect.ValueOf(reqRes)
+	in := make([]reflect.Value, 1)
+	in[0] = reflect.ValueOf(reqRes)
 	Fn := reflect.ValueOf(route.Fn)
 
 	//// Call web server handle function
-	respRes := Fn.Call(params)
+	out := Fn.Call(in)
 
 	//// response to client
-	resp := respRes[0].Interface()
+	resp := out[0].Interface()
 	defer route.ResPool.Put(resp)
 
 	middleware.ResponseJson(w, resp)
