@@ -59,10 +59,10 @@ func Response(i interface{}, ci *CodeInfo) {
 		panic(Messages[CodeWrongDataType])
 	}
 	// must include field named CodeInfo
+	if _, ok := v.Type().FieldByName("CodeInfo"); !ok {
+		panic("no field named `CodeInfo`")
+	}
 	ciField := v.FieldByName("CodeInfo")
-	// if ciField == reflect.Zero(reflect.StructField.Type) {
-	// 	panic(Messages[CodeUndefinedField])
-	// }
 	ciField.FieldByName("Code").SetInt(int64(ci.Code))
 	ciField.FieldByName("Message").SetString(ci.Message)
 }
