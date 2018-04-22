@@ -105,6 +105,7 @@ func RegisterHandler() {
 	addRoute(&Route{"/hello", http.MethodGet, ctr.HelloGet, ctr.PoolHelloGetForm, ctr.PoolHelloGetResp})
 	addRoute(&Route{"/hello", http.MethodPost, ctr.HelloPost, ctr.PoolHelloPostForm, ctr.PoolHelloPostResp})
 	addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
+	addRoute(&Route{"/hello/json", http.MethodPost, ctr.HelloJsonBody, ctr.PoolHelloJsonBodyForm, ctr.PoolHelloJsonBodyResp})
 
 	// set other handler
 	ApiHdl.NotFound = ctr.NfController

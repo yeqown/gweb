@@ -3,11 +3,14 @@ package middleware
 import (
 	valid "github.com/astaxie/beego/validation"
 	"github.com/gorilla/schema"
+	. "gweb/logger"
 	. "gweb/utils"
 
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"sync"
 )
 
@@ -55,6 +58,13 @@ var poolValid = &sync.Pool{
 
 var decoder = schema.NewDecoder()
 
+/*
+ * Parse Param in req.Form
+ * Do not support json body yet
+ *
+ * TODO: support json body
+ * TODO: support parse file
+ */
 func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (errs ParamErrors) {
 	switch req.Method {
 	case http.MethodGet:
@@ -67,11 +77,27 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 	// log
 	logReq(req)
 
+	if shouldParseJson(reqRes) {
+		data, err := getJsonData(req)
+		if err != nil {
+			errs = append(errs, NewParamError("parse.json", err.Error(), ""))
+			return
+		}
+		if err = json.Unmarshal(data, reqRes); err != nil {
+			errs = append(errs, NewParamError("json.unmarshal", err.Error(), ""))
+			return
+		}
+		bs, _ := json.Marshal(reqRes)
+		ReqL.Info("pasing json body: " + string(bs))
+		goto Valid
+	}
+
 	// decode
 	if err := decoder.Decode(reqRes, req.Form); err != nil {
 		errs = append(errs, NewParamError("decoder", err.Error(), ""))
 		return
 	}
+Valid:
 	// valid
 	v := poolValid.Get().(*valid.Validation)
 	if ok, err := v.Valid(reqRes); err != nil {
@@ -84,8 +110,17 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 	return
 }
 
+func shouldParseJson(i interface{}) bool {
+	v := reflect.ValueOf(i).Elem()
+	// field not ZeroValie means true
+	if _, ok := v.Type().FieldByName("JSON"); !ok {
+		return false
+	}
+	return true
+}
+
 // parse json body
-func GetJsonData(req *http.Request) (body []byte, err error) {
+func getJsonData(req *http.Request) (body []byte, err error) {
 	if body, err = ioutil.ReadAll(req.Body); err != nil {
 		return
 	}

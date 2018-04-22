@@ -87,3 +87,31 @@ func HelloPut(req *HelloPutForm) *HelloPutResp {
 	Response(resp, NewCodeInfo(CodeOk, ""))
 	return resp
 }
+
+/*
+ * JSON-Body Demo
+ */
+type HelloJsonBodyForm struct {
+	JSON bool   `schema:"-" json:"-"`
+	Name string `schema:"name" valid:"Required" json:"name"`
+	Age  int    `schema:"age" valid:"Required;Min(0)" json:"age"`
+}
+
+var PoolHelloJsonBodyForm = &sync.Pool{New: func() interface{} { return &HelloJsonBodyForm{} }}
+
+type HelloJsonBodyResp struct {
+	CodeInfo
+	Tip string `json:"tip"`
+}
+
+var PoolHelloJsonBodyResp = &sync.Pool{New: func() interface{} { return &HelloJsonBodyResp{} }}
+
+func HelloJsonBody(req *HelloJsonBodyForm) *HelloJsonBodyResp {
+	resp := PoolHelloJsonBodyResp.Get().(*HelloJsonBodyResp)
+	defer PoolHelloJsonBodyResp.Put(resp)
+
+	resp.Tip = fmt.Sprintf("JSON-Body Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
+
+	Response(resp, NewCodeInfo(CodeOk, ""))
+	return resp
+}
