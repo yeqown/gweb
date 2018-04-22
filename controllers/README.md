@@ -8,7 +8,7 @@ Necessary Condition:
 # file: router.router.go, func: RegisterHandler
 addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
 ```
-* 3. var **`PoolOfReqType`** and **`PoolOfRespType`** ** in type **`Sync.Pool`**
+* 3. var **`PoolOfReqType`** and **`PoolOfRespType`** in type **`Sync.Pool`**
 
 ### Get Method
 
