@@ -7,6 +7,9 @@ import (
 	"sync"
 )
 
+/*
+ * Get Demo
+ */
 type HelloGetForm struct {
 	Name string `schema:"name" valid:"Required" json:"name"`
 	Age  int    `schema:"age" valid:"Required;Min(18)" json:"age"`
@@ -31,6 +34,9 @@ func HelloGet(req *HelloGetForm) *HelloGetResp {
 	return resp
 }
 
+/*
+ * POST Demo
+ */
 type HelloPostForm struct {
 	Name string `schema:"name" valid:"Required" json:"name"`
 	Age  int    `schema:"age" valid:"Required;Min(18)" json:"age"`
@@ -50,6 +56,33 @@ func HelloPost(req *HelloPostForm) *HelloPostResp {
 	defer PoolHelloPostResp.Put(resp)
 
 	resp.Tip = fmt.Sprintf("POST Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
+
+	Response(resp, NewCodeInfo(CodeOk, ""))
+	return resp
+}
+
+/*
+ * PUT Demo
+ */
+type HelloPutForm struct {
+	Name string `schema:"name" valid:"Required" json:"name"`
+	Age  int    `schema:"age" valid:"Required;Min(18)" json:"age"`
+}
+
+var PoolHelloPutForm = &sync.Pool{New: func() interface{} { return &HelloPutForm{} }}
+
+type HelloPutResp struct {
+	CodeInfo
+	Tip string `json:"tip"`
+}
+
+var PoolHelloPutResp = &sync.Pool{New: func() interface{} { return &HelloPutResp{} }}
+
+func HelloPut(req *HelloPutForm) *HelloPutResp {
+	resp := PoolHelloPutResp.Get().(*HelloPutResp)
+	defer PoolHelloPutResp.Put(resp)
+
+	resp.Tip = fmt.Sprintf("PUT Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
 
 	Response(resp, NewCodeInfo(CodeOk, ""))
 	return resp

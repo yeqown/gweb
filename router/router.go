@@ -104,6 +104,7 @@ func RegisterHandler() {
 	AppL.Info("RegisterHandler start")
 	addRoute(&Route{"/hello", http.MethodGet, ctr.HelloGet, ctr.PoolHelloGetForm, ctr.PoolHelloGetResp})
 	addRoute(&Route{"/hello", http.MethodPost, ctr.HelloPost, ctr.PoolHelloPostForm, ctr.PoolHelloPostResp})
+	addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
 
 	// set other handler
 	ApiHdl.NotFound = ctr.NfController

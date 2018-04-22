@@ -29,7 +29,7 @@ func HelloGet(req *HelloGetForm) *HelloGetResp {
 }
 ```
 
-![Get-Method](#)
+![Get-Method](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/getmethod.png)
 
 ### Post Method
 
@@ -59,4 +59,34 @@ func HelloPost(req *HelloPostForm) *HelloPostResp {
 	return resp
 }
 ```
-![POST-Method](#)
+![POST-Method](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/postmethod.png)
+
+### Put Method
+
+```golang
+type HelloPutForm struct {
+	Name string `schema:"name" valid:"Required" json:"name"`
+	Age  int    `schema:"age" valid:"Required;Min(18)" json:"age"`
+}
+
+var PoolHelloPutForm = &sync.Pool{New: func() interface{} { return &HelloPutForm{} }}
+
+type HelloPutResp struct {
+	CodeInfo
+	Tip string `json:"tip"`
+}
+
+var PoolHelloPutResp = &sync.Pool{New: func() interface{} { return &HelloPutResp{} }}
+
+func HelloPut(req *HelloPutForm) *HelloPutResp {
+	resp := PoolHelloPutResp.Get().(*HelloPutResp)
+	defer PoolHelloPutResp.Put(resp)
+
+	resp.Tip = fmt.Sprintf("POST Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
+
+	Response(resp, NewCodeInfo(CodeOk, ""))
+	return resp
+}
+```
+
+![Put-Method](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/putmethod.png)

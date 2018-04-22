@@ -64,6 +64,8 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 	default:
 		req.ParseForm()
 	}
+	// log
+	logReq(req)
 
 	// decode
 	if err := decoder.Decode(reqRes, req.Form); err != nil {

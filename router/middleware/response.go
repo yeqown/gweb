@@ -9,6 +9,7 @@ import (
 )
 
 func response(w http.ResponseWriter, s string) {
+	ReqL.Info(s)
 	_, err := io.WriteString(w, s)
 	if err != nil {
 		ReqL.Errorf("response err: %s", err.Error())
