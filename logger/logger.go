@@ -10,6 +10,7 @@ import (
 	// "fmt"
 	// "time"
 	L "github.com/yeqown/log"
+	"path/filepath"
 )
 
 var (
@@ -17,10 +18,16 @@ var (
 	AppL = L.NewLogger()
 )
 
-func init() {
+func InitLogger(logPath string) {
+	var err error
+	if logPath, err = filepath.Abs(logPath); err != nil {
+		panic(err)
+	}
+	AppL.Infof("Init Logger with logPath: %s", logPath)
+
 	// TODO: init a global logger instance, so that can log anywhere
 	// and cant output to console and file both
 	// file can be splited day by day format like "app.20180412.log"
-	ReqL.SetFileOutput("../logs", "app")
-	ReqL.SetFileOutput("../logs", "request")
+	AppL.SetFileOutput(logPath, "app")
+	ReqL.SetFileOutput(logPath, "request")
 }

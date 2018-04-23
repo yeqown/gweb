@@ -1,7 +1,10 @@
 package main
 
 import (
+	. "gweb/logger"
 	"gweb/router"
+	"gweb/utils"
+
 	"net/http"
 )
 
@@ -11,10 +14,12 @@ func startServer() {
 	router.RegisterHandler()
 
 	server := &http.Server{
-		Addr:    ":5050",
+		Addr:    utils.Fstring(":%d", _instance.ServerC.Port),
 		Handler: router.ApiHdl,
 	}
-	server.ListenAndServe()
+	if err := server.ListenAndServe(); err != nil {
+		AppL.Fatal(err.Error())
+	}
 }
 
 // func InitServeMux() {
