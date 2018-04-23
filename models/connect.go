@@ -92,15 +92,15 @@ func ConnectPostgres(poc *PostgresConfig) {
  * Get db connection
  * Mysql / Postgres / Redis / Mongo .etc
  */
-func GetMysqlDB() *gorm.DB {
+func getMysqlDB() *gorm.DB {
 	return mysqlIns
 }
 
-func GetPostgresDB() *gorm.DB {
+func getPostgresDB() *gorm.DB {
 	return postgresIns
 }
 
-func GetRedisDB() *redis.Client {
+func getRedisDB() *redis.Client {
 	return redisIns
 }
 
