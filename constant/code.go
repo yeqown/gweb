@@ -12,6 +12,10 @@ const (
 	CodeWrongDataType
 	CodeUndefinedField
 
+	CodeNoRegMobile
+	CodeDupMobile
+	CodeWrongPwd
+
 	CodeSystemErr        = 500 + iota
 	CodeNotFound         = 404
 	CodeMethodNotAllowed = 405
@@ -23,6 +27,10 @@ var Messages = map[int]string{
 	CodeParamInvalid:   "非法参数",
 	CodeWrongDataType:  "错误的数据类型",
 	CodeUndefinedField: "未定义的字段",
+
+	CodeNoRegMobile: "手机号码尚未注册",
+	CodeDupMobile:   "手机号码已经注册",
+	CodeWrongPwd:    "密码错误",
 
 	CodeSystemErr:        "系统错误",
 	CodeNotFound:         "Api未找到",
