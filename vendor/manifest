@@ -1,0 +1,70 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/astaxie/beego/validation",
+			"repository": "https://github.com/astaxie/beego",
+			"vcs": "git",
+			"revision": "f16688817aa428d10361394015b40d096b680542",
+			"branch": "master",
+			"path": "/validation",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/denisenkom/go-mssqldb",
+			"repository": "https://github.com/denisenkom/go-mssqldb",
+			"vcs": "git",
+			"revision": "e32faac87a2220f9342289f2c3b567d1424b8ec5",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/go-redis/redis",
+			"repository": "https://github.com/go-redis/redis",
+			"vcs": "git",
+			"revision": "9ccc23344a52164531ed90362e2516b798e3296c",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/go-sql-driver/mysql",
+			"repository": "https://github.com/go-sql-driver/mysql",
+			"vcs": "git",
+			"revision": "3287d94d4c6a48a63e16fffaabf27ab20203af2a",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/gorilla/schema",
+			"repository": "https://github.com/gorilla/schema",
+			"vcs": "git",
+			"revision": "d0e4c24cff97ae983e9847e0ed5a02dc10013d41",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/jinzhu/gorm",
+			"repository": "https://github.com/jinzhu/gorm",
+			"vcs": "git",
+			"revision": "6842b49a1ad0feb6b93be830fe63a682cf853ada",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/jinzhu/inflection",
+			"repository": "https://github.com/jinzhu/inflection",
+			"vcs": "git",
+			"revision": "04140366298a54a039076d798123ffa108fff46c",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/yeqown/log",
+			"repository": "https://github.com/yeqown/log",
+			"vcs": "git",
+			"revision": "7063b5e0e64b332ff54845f426b54629f13110fd",
+			"branch": "master",
+			"notests": true
+		}
+	]
+}

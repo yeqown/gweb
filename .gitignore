@@ -14,8 +14,8 @@
 .glide/
 
 # vendor
-vendor/
 !vendor/manifest
+/vendor/
 logs/
 gowatch.yml
 

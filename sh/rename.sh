@@ -9,12 +9,12 @@
 
 NewName=$1
 
-if [ $NewName = '' ]; then
-	echo "Need a arg as NewName for your Project"
+if [ -z $NewName ]; then
+	echo "Info: need a newname for your Project"
 	exit
 fi
 
-PATH=`cd ../ && pwd`
-echo "Command Running: $PATH"
+PATH=`pwd`
+echo "Command Running: $PATH, NewName: $NewName"
 
-sed -i "s/gewb/$NewName/g" `grep gewb -rl $PATH`
+/usr/bin/grep gewb -rl $PATH | /usr/bin/xargs /usr/bin/sed -i "s/gewb/$NewName/g"
