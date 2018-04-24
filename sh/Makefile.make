@@ -1,3 +1,3 @@
-default: 
-
-clean:
+# 
+# build and deploy works
+# 
