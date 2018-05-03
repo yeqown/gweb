@@ -1,3 +1,6 @@
+// Package middleware include param, reqlog, response, safe
+// related functional modules
+// current safe.go mainly parse and valid `Request.Form`
 package middleware
 
 import (

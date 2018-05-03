@@ -1,3 +1,6 @@
+// Package middleware include param, reqlog, response, safe
+// related functional modules
+// current safe.go mainly recover while panic err hanppening
 package middleware
 
 import (
