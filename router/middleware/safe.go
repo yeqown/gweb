@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+// recover from panic
+// will be used in `Handler.ServeHTTP`
 func SafeHandler(w http.ResponseWriter, req *http.Request) {
 	if err, ok := recover().(error); ok {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

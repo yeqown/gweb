@@ -11,6 +11,7 @@ import (
 	"net/http"
 )
 
+// base response s to client
 func response(w http.ResponseWriter, s string) {
 	ReqL.Info(s)
 	_, err := io.WriteString(w, s)

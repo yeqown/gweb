@@ -17,6 +17,7 @@ import (
 	"sync"
 )
 
+// ParamError include Field, Value, Message
 type ParamError struct {
 	Field   string      `json:"field"`
 	Value   interface{} `json:"value"`
@@ -25,6 +26,7 @@ type ParamError struct {
 
 type ParamErrors []*ParamError
 
+// String of ParamError, to format as string
 func (pe *ParamError) String() string {
 	return Fstring("field-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
 }
@@ -33,6 +35,7 @@ func (pe *ParamError) Error() string {
 	return pe.String()
 }
 
+// new ParamError with (field, message string, value interface{})
 func NewParamError(field, message string, value interface{}) *ParamError {
 	return &ParamError{
 		Field:   field,
@@ -41,6 +44,7 @@ func NewParamError(field, message string, value interface{}) *ParamError {
 	}
 }
 
+// new ParamError from valid.Error
 func NewParamErrorFromValidError(ve *valid.Error) *ParamError {
 	return &ParamError{
 		Field:   ve.Field,
@@ -61,13 +65,9 @@ var poolValid = &sync.Pool{
 
 var decoder = schema.NewDecoder()
 
-/*
- * Parse Param in req.Form
- * Do not support json body yet
- *
- * TODO: support json body
- * TODO: support parse file
- */
+// ParseParams, parse params into reqRes from req.Form, and support
+// form-data, json-body
+// TODO: support parse file
 func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (errs ParamErrors) {
 	switch req.Method {
 	case http.MethodGet:
@@ -77,7 +77,7 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 	default:
 		req.ParseForm()
 	}
-	// log
+	// log request
 	logReq(req)
 
 	if shouldParseJson(reqRes) {
@@ -113,6 +113,7 @@ Valid:
 	return
 }
 
+// shouldParseJson check `i` has field `JSON`
 func shouldParseJson(i interface{}) bool {
 	v := reflect.ValueOf(i).Elem()
 	// field not ZeroValie means true
@@ -122,7 +123,7 @@ func shouldParseJson(i interface{}) bool {
 	return true
 }
 
-// parse json body
+// getJsonData parse json body from request
 func getJsonData(req *http.Request) (body []byte, err error) {
 	if body, err = ioutil.ReadAll(req.Body); err != nil {
 		return
