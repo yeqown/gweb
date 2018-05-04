@@ -1,6 +1,7 @@
 package constant
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 )
@@ -17,6 +18,7 @@ const (
 	CodeWrongPwd
 
 	CodeSystemErr        = 500 + iota
+	CodeResponseTimeout  = 503
 	CodeNotFound         = 404
 	CodeMethodNotAllowed = 405
 )
@@ -33,8 +35,17 @@ var Messages = map[int]string{
 	CodeWrongPwd:    "密码错误",
 
 	CodeSystemErr:        "系统错误",
+	CodeResponseTimeout:  "响应超时",
 	CodeNotFound:         "Api未找到",
 	CodeMethodNotAllowed: "该方法不允许",
+}
+
+var TimeoutJsonResp string
+
+func init() {
+	ci := NewCodeInfo(CodeResponseTimeout, "")
+	bs, _ := json.Marshal(ci)
+	TimeoutJsonResp = string(bs)
 }
 
 type CodeInfo struct {

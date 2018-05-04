@@ -13,8 +13,17 @@ type ServerConfig struct {
 	Logpath string `json:"Logpath"`
 }
 
+type RpcServerConfig struct {
+	Host      string `json:"host"`       // host
+	Port      int    `json:"port"`       // port
+	Path      string `json:"path"`       // path
+	DebugPath string `json:"debug_path"` // debug_path
+	Network   string `json:"network"`    // tcp http
+}
+
 type Config struct {
 	ServerC *ServerConfig       `json:"ServerConfig"`
+	RpcC    *RpcServerConfig    `json:"RpcServerConfig"`
 	MysqlC  *models.MysqlConfig `json:"MysqlConfig"`
 	RedisC  *models.RedisConfig `json:"RedisConfig"`
 }

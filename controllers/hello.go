@@ -5,6 +5,7 @@ import (
 
 	"fmt"
 	"sync"
+	"time"
 )
 
 /*
@@ -29,6 +30,9 @@ func HelloGet(req *HelloGetForm) *HelloGetResp {
 	defer PoolHelloGetResp.Put(resp)
 
 	resp.Tip = fmt.Sprintf("Get Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
+
+	// TODO: sleep over 10 *time.Second, test Response TimeOut
+	time.Sleep(10 * time.Second)
 
 	Response(resp, NewCodeInfo(CodeOk, ""))
 	return resp

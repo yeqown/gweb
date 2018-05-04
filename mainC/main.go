@@ -21,5 +21,6 @@ func main() {
 	InitLogger(_instance.ServerC.Logpath)
 	ConnectDBs()
 
+	go startRpcServer()
 	startServer()
 }
