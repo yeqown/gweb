@@ -16,6 +16,7 @@ Request Method:
 * [Post](#post-method)
 * [Put](#put-method)
 * [JsonBody](#jsonbody-method)
+* [Files](#files-method)
 
 ### Get Method
 
@@ -106,7 +107,7 @@ func HelloPut(req *HelloPutForm) *HelloPutResp {
 
 ![Put-Method](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/putmethod.png)
 
-### JSON body Method
+### JSONbody Method
 
 ```golang
 type HelloJsonBodyForm struct {
@@ -136,3 +137,56 @@ func HelloJsonBody(req *HelloJsonBodyForm) *HelloJsonBodyResp {
 ```
 
 ![JSON-Body](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/jsonbody.png)
+
+### Files Method
+
+```golang
+type HelloFileForm struct {
+	FILES map[string]mw.ParamFile `schema:"-" json:"-"` // must be this name
+	Name  string                  `schema:"name" valid:"Required"`
+	Age   int                     `schema:"age" valid:"Required"`
+}
+
+var PoolHelloFileForm = &sync.Pool{New: func() interface{} { return &HelloFileForm{} }}
+
+type HelloFileResp struct {
+	CodeInfo
+	Data struct {
+		Tip  string `json:"tip"`
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	} `json:"data"`
+}
+
+var PoolHelloFileResp = &sync.Pool{New: func() interface{} { return &HelloFileResp{} }}
+
+func HelloFile(req *HelloFileForm) *HelloFileResp {
+	resp := PoolHelloFileResp.Get().(*HelloFileResp)
+	defer PoolHelloFileResp.Put(resp)
+
+	resp.Data.Tip = "foo"
+	for key, paramFile := range req.FILES {
+		AppL.Infof("%s:%s\n", key, paramFile.FileHeader.Filename)
+		s, _ := bufio.NewReader(paramFile.File).ReadString(0)
+		resp.Data.Tip += s
+	}
+
+	resp.Data.Name = req.Name
+	resp.Data.Age = req.Age
+
+	Response(resp, NewCodeInfo(CodeOk, ""))
+	return resp
+}
+```
+
+![Files-Form](https://raw.githubusercontent.com/yeqown/gweb/master/screenshots/files.png)
+
+```txt
+# demo1.txt
+你好啊
+好吧
+
+# demo2.txt
+第二哥文件
+line
+```
