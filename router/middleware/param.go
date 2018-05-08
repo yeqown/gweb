@@ -12,10 +12,18 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"reflect"
 	"sync"
 )
+
+type ParamFile struct {
+	File       multipart.File
+	FileHeader multipart.FileHeader
+}
+
+// type ParamFiles map[string]ParamFile
 
 // ParamError include Field, Value, Message
 type ParamError struct {
@@ -80,6 +88,8 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 	// log request
 	logReq(req)
 
+	// if should parse Json body
+	// parse json into reqRes
 	if shouldParseJson(reqRes) {
 		data, err := getJsonData(req)
 		if err != nil {
@@ -95,11 +105,50 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 		goto Valid
 	}
 
+	// if has FILES field,
+	// so parese req to get attachment files
+	if shouldParseFile(reqRes) {
+		AppL.Info("should parse files")
+		if req.MultipartForm == nil || req.MultipartForm.File == nil {
+			errs = append(errs, NewParamError("FILES", "empty file param", ""))
+			return
+		}
+		rv := reflect.ValueOf(reqRes).Elem().FieldByName("FILES")
+		// typ := reflect.ValueOf(reqRes).Elem().FieldByName("FILES").Type()
+		filesMap := reflect.MakeMap(rv.Type())
+
+		// parse file loop
+		for key, _ := range req.MultipartForm.File {
+			file, file_header, err := req.FormFile(key)
+			if err != nil {
+				errs = append(errs, NewParamError(Fstring("parse request.FormFile: %s", key),
+					err.Error(), ""))
+			}
+			defer file.Close()
+
+			filesMap.SetMapIndex(
+				reflect.ValueOf(key),
+				reflect.ValueOf(ParamFile{
+					File:       file,
+					FileHeader: *file_header,
+				}),
+			)
+		} // loop end
+
+		// set value to reqRes.Field `FILES`
+		rv.Set(filesMap)
+
+		if len(errs) != 0 {
+			return
+		}
+	}
+
 	// decode
 	if err := decoder.Decode(reqRes, req.Form); err != nil {
 		errs = append(errs, NewParamError("decoder", err.Error(), ""))
 		return
 	}
+
 Valid:
 	// valid
 	v := poolValid.Get().(*valid.Validation)
@@ -118,6 +167,16 @@ func shouldParseJson(i interface{}) bool {
 	v := reflect.ValueOf(i).Elem()
 	// field not ZeroValie means true
 	if _, ok := v.Type().FieldByName("JSON"); !ok {
+		return false
+	}
+	return true
+}
+
+// shouldParseFile check i has filed `FILE`
+func shouldParseFile(i interface{}) bool {
+	v := reflect.ValueOf(i).Elem()
+	// field not ZeroValie means true
+	if _, ok := v.Type().FieldByName("FILES"); !ok {
 		return false
 	}
 	return true

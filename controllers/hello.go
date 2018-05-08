@@ -2,7 +2,10 @@ package controllers
 
 import (
 	. "gweb/constant"
+	. "gweb/logger"
+	mw "gweb/router/middleware"
 
+	"bufio"
 	"fmt"
 	"sync"
 	"time"
@@ -115,6 +118,47 @@ func HelloJsonBody(req *HelloJsonBodyForm) *HelloJsonBodyResp {
 	defer PoolHelloJsonBodyResp.Put(resp)
 
 	resp.Tip = fmt.Sprintf("JSON-Body Hello, %s! your age[%d] is valid to access", req.Name, req.Age)
+
+	Response(resp, NewCodeInfo(CodeOk, ""))
+	return resp
+}
+
+/*
+ * File Hanlder demo
+ */
+
+type HelloFileForm struct {
+	FILES map[string]mw.ParamFile `schema:"-" json:"-"`
+	Name  string                  `schema:"name" valid:"Required"`
+	Age   int                     `schema:"age" valid:"Required"`
+}
+
+var PoolHelloFileForm = &sync.Pool{New: func() interface{} { return &HelloFileForm{} }}
+
+type HelloFileResp struct {
+	CodeInfo
+	Data struct {
+		Tip  string `json:"tip"`
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	} `json:"data"`
+}
+
+var PoolHelloFileResp = &sync.Pool{New: func() interface{} { return &HelloFileResp{} }}
+
+func HelloFile(req *HelloFileForm) *HelloFileResp {
+	resp := PoolHelloFileResp.Get().(*HelloFileResp)
+	defer PoolHelloFileResp.Put(resp)
+
+	resp.Data.Tip = "foo"
+	for key, paramFile := range req.FILES {
+		AppL.Infof("%s:%s\n", key, paramFile.FileHeader.Filename)
+		s, _ := bufio.NewReader(paramFile.File).ReadString(0)
+		resp.Data.Tip += s
+	}
+
+	resp.Data.Name = req.Name
+	resp.Data.Age = req.Age
 
 	Response(resp, NewCodeInfo(CodeOk, ""))
 	return resp

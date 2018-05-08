@@ -106,6 +106,7 @@ func RegisterHandler() {
 	addRoute(&Route{"/hello", http.MethodPost, ctr.HelloPost, ctr.PoolHelloPostForm, ctr.PoolHelloPostResp})
 	addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
 	addRoute(&Route{"/hello/json", http.MethodPost, ctr.HelloJsonBody, ctr.PoolHelloJsonBodyForm, ctr.PoolHelloJsonBodyResp})
+	addRoute(&Route{"/hello/file", http.MethodPost, ctr.HelloFile, ctr.PoolHelloFileForm, ctr.PoolHelloFileResp})
 
 	addRoute(&Route{"/user/register", http.MethodPost, ctr.RegisterUserPost, ctr.PoolRegUserForm, ctr.PoolRegUserResp})
 	addRoute(&Route{"/user/login", http.MethodPost, ctr.LoginUserPost, ctr.PoolLogUserForm, ctr.PoolLogUserResp})
