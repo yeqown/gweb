@@ -1,9 +1,6 @@
 package controllers
 
 import (
-	// . "gweb/constant"
-	// "gweb/router/middleware"
-
 	"net/http"
 )
 

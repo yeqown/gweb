@@ -1,13 +1,12 @@
-// Package main
+// Package gweb
 // Support HTTP Server, restful api handler, with timeout setting
 //
 // Support RPC Server, but this only called by golang rpc client,
 // not good enough
-package main
+package gweb
 
 import (
 	"gweb/constant"
-	"gweb/controllers/rpctr"
 	. "gweb/logger"
 	"gweb/router"
 	"gweb/utils"
@@ -19,10 +18,10 @@ import (
 	"time"
 )
 
-// startServer over HTTP as for api server
-func startServer() {
-	router.RegisterHandler()
+var rpc_server = rpc.NewServer()
 
+// StartServer over HTTP as for api server
+func StartServer() {
 	server := &http.Server{
 		Addr: utils.Fstring(":%d", _instance.ServerC.Port),
 		Handler: http.TimeoutHandler(router.ApiHdl,
@@ -37,12 +36,13 @@ func startServer() {
 	}
 }
 
-// startRpcSerevr running a server to deal with rpc request
-// default set jsonrpc
-func startRpcServer() {
-	rpc_server := rpc.NewServer()
-	registerRpcService(rpc_server)
+func GetRpcServer() *rpc.Server {
+	return rpc_server
+}
 
+// StartRpcSerevr running a server to deal with rpc request
+// default set jsonrpc
+func StartRpcServer() {
 	// DefaultRPCPath = "/_goRPC_"
 	// DefaultDebugPath = "/debug/rpc"
 	rpc_server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
@@ -68,12 +68,4 @@ func startRpcServer() {
 		AppL.Info("A new Rpc request received!")
 		go rpc_server.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
-}
-
-// registerRpcService register All service for rpc server
-func registerRpcService(s *rpc.Server) {
-	AppL.Info("registerRpcService doing...")
-	// add calculator into service
-	calculator := new(rpctr.Calculator)
-	s.Register(calculator)
 }

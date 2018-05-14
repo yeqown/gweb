@@ -1,8 +1,6 @@
-package main
+package gweb
 
 import (
-	"gweb/models"
-
 	"bufio"
 	"encoding/json"
 	"os"
@@ -22,19 +20,19 @@ type RpcServerConfig struct {
 }
 
 type Config struct {
-	ServerC *ServerConfig       `json:"ServerConfig"`
-	RpcC    *RpcServerConfig    `json:"RpcServerConfig"`
-	MysqlC  *models.MysqlConfig `json:"MysqlConfig"`
-	RedisC  *models.RedisConfig `json:"RedisConfig"`
-	MgoC    *models.MongoConfig `json:"MongoConfig"`
+	ServerC *ServerConfig    `json:"ServerConfig"`
+	RpcC    *RpcServerConfig `json:"RpcServerConfig"`
 }
 
 var _instance *Config
 
+// GetInstance get global config instance
 func GetInstance() *Config {
 	return _instance
 }
 
+// LoadConfig read config.json file and pares to
+// Golang Struct config instance varible
 func LoadConfig(filepath string) error {
 	fp, err := os.Open(filepath)
 	defer fp.Close()

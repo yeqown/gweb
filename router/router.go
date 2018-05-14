@@ -13,6 +13,12 @@ import (
 	"sync"
 )
 
+func init() {
+	// set other handler
+	ApiHdl.NotFound = ctr.NfController
+	ApiHdl.MethodNotAllowed = ctr.MnaController
+}
+
 type ApiHandler struct {
 	NotFound         http.Handler
 	MethodNotAllowed http.Handler
@@ -100,23 +106,8 @@ type Route struct {
 	ResPool *sync.Pool
 }
 
-func RegisterHandler() {
-	AppL.Info("RegisterHandler start")
-	addRoute(&Route{"/hello", http.MethodGet, ctr.HelloGet, ctr.PoolHelloGetForm, ctr.PoolHelloGetResp})
-	addRoute(&Route{"/hello", http.MethodPost, ctr.HelloPost, ctr.PoolHelloPostForm, ctr.PoolHelloPostResp})
-	addRoute(&Route{"/hello", http.MethodPut, ctr.HelloPut, ctr.PoolHelloPutForm, ctr.PoolHelloPutResp})
-	addRoute(&Route{"/hello/json", http.MethodPost, ctr.HelloJsonBody, ctr.PoolHelloJsonBodyForm, ctr.PoolHelloJsonBodyResp})
-	addRoute(&Route{"/hello/file", http.MethodPost, ctr.HelloFile, ctr.PoolHelloFileForm, ctr.PoolHelloFileResp})
-
-	addRoute(&Route{"/user/register", http.MethodPost, ctr.RegisterUserPost, ctr.PoolRegUserForm, ctr.PoolRegUserResp})
-	addRoute(&Route{"/user/login", http.MethodPost, ctr.LoginUserPost, ctr.PoolLogUserForm, ctr.PoolLogUserResp})
-
-	// set other handler
-	ApiHdl.NotFound = ctr.NfController
-	ApiHdl.MethodNotAllowed = ctr.MnaController
-}
-
-func addRoute(r *Route) {
+func AddRoute(r *Route) {
+	AppL.Infof("Adding route: %v", r)
 	if _, ok := Routes[r.Path]; !ok {
 		Routes[r.Path] = []*Route{}
 	}
