@@ -27,5 +27,10 @@
 		"MaxIdle": 50,
 		"IdleTimeout": 600,
 		"Wait": true
+	},
+	"MongoConfig": {
+		"Addrs": "localhost:27017",
+		"Timeout": 5,
+		"PoolLimit": 20
 	}
 }

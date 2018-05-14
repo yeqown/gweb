@@ -16,7 +16,7 @@ func ConnectDBs() {
 	}
 
 	models.ConnectMysql(_instance.MysqlC)
-	// models.ConnectMongo()
+	models.ConnectMongo(_instance.MgoC)
 	models.ConnectRedis(_instance.RedisC)
 	// models.ConnectPostgres()
 }

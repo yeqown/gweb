@@ -10,7 +10,7 @@ MAIN_C=$(CURDIR)/../mainC
 CONF_PATH=$(CURDIR)/../configs
 PACK_PATH=$(CURDIR)/../package
 PACK_BIN_PATH=$(PACK_PATH)/bin
-BIN=gweb
+BIN=recipe
 
 default: test build
 

@@ -4,15 +4,19 @@ import (
 	"github.com/go-redis/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/mgo.v2"
+	"math"
+	"strings"
+	"time"
 
 	. "gweb/logger"
 	"gweb/utils"
 )
 
 var (
-	mysqlIns    *gorm.DB
-	postgresIns *gorm.DB
-	redisIns    *redis.Client
+	mysqlIns *gorm.DB
+	redisIns *redis.Client
+	mgoIns   *mgo.Session
 )
 
 type MysqlConfig struct {
@@ -24,6 +28,9 @@ type MysqlConfig struct {
 }
 
 type MongoConfig struct {
+	Addrs     string `json:"Addrs"`
+	Timeout   int64  `json:"Timeout"`
+	PoolLimit int    `json:"PoolLimit"`
 }
 
 type RedisConfig struct {
@@ -36,9 +43,6 @@ type RedisConfig struct {
 	MaxIdle     int    `json:"MaxIdle"`
 	IdleTimeout int    `json:"IdleTimeout"`
 	Wait        bool   `json:"Wait"`
-}
-
-type PostgresConfig struct {
 }
 
 /*
@@ -68,9 +72,24 @@ func ConnectMysql(myc *MysqlConfig) {
 	mysqlIns = db
 }
 
-// TODO: Connect to Mongo
+// Connect to Mongo
 func ConnectMongo(moc *MongoConfig) {
+	info := mgo.DialInfo{
+		Addrs:     strings.Split(moc.Addrs, ","),
+		Timeout:   time.Duration(moc.Timeout * int64(math.Pow10(9))),
+		PoolLimit: moc.PoolLimit,
+	}
+	// connect db
+	session, err := mgo.DialWithInfo(&info)
+	if err != nil {
+		AppL.Fatalf("Ping mysql failed: %s", err.Error())
+	}
+	mgoIns = session
+	AppL.Info("Mongo connected, address: " + moc.Addrs)
 
+	// settings
+	mgoIns.SetMode(mgo.Strong, true)
+	mgoIns.SetSocketTimeout(time.Duration(5 * time.Second))
 }
 
 func ConnectRedis(rec *RedisConfig) {
@@ -83,11 +102,6 @@ func ConnectRedis(rec *RedisConfig) {
 	})
 }
 
-// TODO: Connect postgres
-func ConnectPostgres(poc *PostgresConfig) {
-
-}
-
 /*
  * Get db connection
  * Mysql / Postgres / Redis / Mongo .etc
@@ -96,15 +110,22 @@ func getMysqlDB() *gorm.DB {
 	return mysqlIns
 }
 
-func getPostgresDB() *gorm.DB {
-	return postgresIns
-}
-
 func getRedisDB() *redis.Client {
 	return redisIns
 }
 
-// TODO: get mongo connection
-func GetMongoDB() {
+func getMongoClone() *mgo.Session {
+	return mgoIns.Clone()
+}
 
+func getMongoDB() *mgo.Session {
+	return mgoIns
+}
+
+func NewMongoDB(dbName string) *mgo.Database {
+	return getMongoClone().DB(dbName)
+}
+
+func NewMongoColl(dbName, collName string) *mgo.Collection {
+	return NewMongoDB(dbName).C(collName)
 }

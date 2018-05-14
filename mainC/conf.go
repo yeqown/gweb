@@ -26,6 +26,7 @@ type Config struct {
 	RpcC    *RpcServerConfig    `json:"RpcServerConfig"`
 	MysqlC  *models.MysqlConfig `json:"MysqlConfig"`
 	RedisC  *models.RedisConfig `json:"RedisConfig"`
+	MgoC    *models.MongoConfig `json:"MongoConfig"`
 }
 
 var _instance *Config
