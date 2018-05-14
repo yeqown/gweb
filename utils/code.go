@@ -1,8 +1,7 @@
-package constant
+package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"reflect"
 )
 
@@ -57,7 +56,7 @@ func NewCodeInfo(code int, message string) *CodeInfo {
 	ci := new(CodeInfo)
 	if message == "" {
 		if m, ok := Messages[code]; !ok {
-			panic(FString("code-[%d] undefined", code))
+			panic(Fstring("code-[%d] undefined", code))
 		} else {
 			message = m
 		}
@@ -84,8 +83,4 @@ func Response(i interface{}, ci *CodeInfo) {
 	ciField := v.FieldByName("CodeInfo")
 	ciField.FieldByName("Code").SetInt(int64(ci.Code))
 	ciField.FieldByName("Message").SetString(ci.Message)
-}
-
-func FString(format string, v ...interface{}) string {
-	return fmt.Sprintf(format, v...)
 }

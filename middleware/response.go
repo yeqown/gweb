@@ -5,10 +5,11 @@ package middleware
 
 import (
 	"encoding/json"
-	. "gweb/constant"
-	. "gweb/logger"
 	"io"
 	"net/http"
+
+	. "gweb/logger"
+	. "gweb/utils"
 )
 
 // base response s to client
@@ -35,14 +36,8 @@ func ResponseJson(w http.ResponseWriter, i interface{}) {
 	response(w, string(bs))
 }
 
-// JsonErr Includes `Errs` field which contains interface{} value
-type JsonErr struct {
-	CodeInfo
-	Errs interface{} `json:"errs"`
-}
-
 // ResponseErrorJson response JsonErr data to client
-func ResponseErrorJson(w http.ResponseWriter, je *JsonErr) {
+func ResponseErrorJson(w http.ResponseWriter, je interface{}) {
 	bs, err := json.Marshal(je)
 	if err != nil {
 		ReqL.Errorf("get an err: %s", err.Error())

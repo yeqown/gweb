@@ -1,27 +1,31 @@
-package router
+package gweb
 
 import (
-	. "gweb/constant"
-	ctr "gweb/controllers"
-	. "gweb/logger"
-	"gweb/router/middleware"
-
-	// "io"
 	"fmt"
 	"net/http"
 	"reflect"
 	"sync"
+
+	. "gweb/logger"
+	"gweb/middleware"
+	. "gweb/utils"
 )
 
 func init() {
 	// set other handler
-	ApiHdl.NotFound = ctr.NfController
-	ApiHdl.MethodNotAllowed = ctr.MnaController
+	ApiHdl.NotFound = NfController
+	ApiHdl.MethodNotAllowed = MnaController
 }
 
 type ApiHandler struct {
 	NotFound         http.Handler
 	MethodNotAllowed http.Handler
+}
+
+// JsonErr Includes `Errs` field which contains interface{} value
+type JsonErr struct {
+	CodeInfo
+	Errs interface{} `json:"errs"`
 }
 
 var (
@@ -73,7 +77,7 @@ Found:
 
 	// parse params
 	if errs := middleware.ParseParams(w, req, reqRes); len(errs) != 0 {
-		je := new(middleware.JsonErr)
+		je := new(JsonErr)
 		Response(je, NewCodeInfo(CodeParamInvalid, ""))
 		je.Errs = errs
 		middleware.ResponseErrorJson(w, je)
@@ -107,7 +111,7 @@ type Route struct {
 }
 
 func AddRoute(r *Route) {
-	AppL.Infof("Adding route: %v", r)
+	AppL.Infof("Adding route: %s %s", r.Path, r.Method)
 	if _, ok := Routes[r.Path]; !ok {
 		Routes[r.Path] = []*Route{}
 	}

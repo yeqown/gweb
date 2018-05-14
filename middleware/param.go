@@ -4,18 +4,19 @@
 package middleware
 
 import (
-	valid "github.com/astaxie/beego/validation"
-	"github.com/gorilla/schema"
-	. "gweb/logger"
-	. "gweb/utils"
-
 	"encoding/json"
 	"errors"
+	valid "github.com/astaxie/beego/validation"
+	"github.com/gorilla/schema"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"reflect"
 	"sync"
+
+	. "gweb/logger"
+	"gweb/utils"
+	// "github.com/yeqown/gweb"
 )
 
 type ParamFile struct {
@@ -36,7 +37,7 @@ type ParamErrors []*ParamError
 
 // String of ParamError, to format as string
 func (pe *ParamError) String() string {
-	return Fstring("field-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
+	return utils.Fstring("field-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
 }
 
 func (pe *ParamError) Error() string {
@@ -121,7 +122,7 @@ func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (
 		for key, _ := range req.MultipartForm.File {
 			file, file_header, err := req.FormFile(key)
 			if err != nil {
-				errs = append(errs, NewParamError(Fstring("parse request.FormFile: %s", key),
+				errs = append(errs, NewParamError(utils.Fstring("parse request.FormFile: %s", key),
 					err.Error(), ""))
 			}
 			defer file.Close()

@@ -6,10 +6,8 @@
 package gweb
 
 import (
-	"gweb/constant"
 	. "gweb/logger"
-	"gweb/router"
-	"gweb/utils"
+	. "gweb/utils"
 
 	"net"
 	"net/http"
@@ -23,10 +21,10 @@ var rpc_server = rpc.NewServer()
 // StartServer over HTTP as for api server
 func StartServer() {
 	server := &http.Server{
-		Addr: utils.Fstring(":%d", _instance.ServerC.Port),
-		Handler: http.TimeoutHandler(router.ApiHdl,
+		Addr: Fstring(":%d", _instance.ServerC.Port),
+		Handler: http.TimeoutHandler(ApiHdl,
 			5*time.Second,
-			constant.TimeoutJsonResp,
+			TimeoutJsonResp,
 		),
 	}
 
@@ -36,6 +34,7 @@ func StartServer() {
 	}
 }
 
+// GetRpcServer get rcp.server instance to register
 func GetRpcServer() *rpc.Server {
 	return rpc_server
 }
@@ -48,7 +47,7 @@ func StartRpcServer() {
 	rpc_server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
 
 	l, err := net.Listen(_instance.RpcC.Network,
-		utils.Fstring("%s:%d",
+		Fstring("%s:%d",
 			_instance.RpcC.Host,
 			_instance.RpcC.Port,
 		),

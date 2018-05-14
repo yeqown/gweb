@@ -1,4 +1,4 @@
-package controllers
+package gweb
 
 import (
 	"net/http"

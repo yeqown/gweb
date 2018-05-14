@@ -1,6 +1,5 @@
 # gweb
-
-golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
+	golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
 
 * [Using](#using)
 * [Validation](#validation)
@@ -19,7 +18,7 @@ cd mainC
 go run *
 ```
 
-Link to [demo](https://github.com/yeqown/gweb/tree/master/controllers)
+Link to [sample](https://github.com/yeqown/gweb-sample)
 
 ## validation
 

@@ -5,10 +5,11 @@ package middleware
 
 import (
 	"encoding/json"
-	. "gweb/logger"
-	"gweb/utils"
 	"net/http"
 	"net/url"
+
+	. "gweb/logger"
+	"gweb/utils"
 )
 
 func logReq(req *http.Request) {

@@ -7,8 +7,6 @@
 package logger
 
 import (
-	// "fmt"
-	// "time"
 	L "github.com/yeqown/log"
 	"path/filepath"
 )

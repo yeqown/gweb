@@ -1,3 +1,6 @@
+// Package utils
+//
+// string.go includes utils functions related string
 package utils
 
 import (
@@ -5,7 +8,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	// "io"
 	"math/rand"
 	"time"
 )
@@ -30,10 +32,12 @@ func init() {
 	len_bs = len(bs)
 }
 
+// Fstring format string implement fmt.Sprintf
 func Fstring(format string, v ...interface{}) string {
 	return fmt.Sprintf(format, v...)
 }
 
+// RandStr make rand str with in length length
 func RandStr(length int) string {
 	var bsBuf bytes.Buffer
 
@@ -44,6 +48,7 @@ func RandStr(length int) string {
 	return bsBuf.String()
 }
 
+// randInt make rand `int` type num
 func randInt(min, max int) int {
 	if min >= max {
 		panic("min must be small than max value")
@@ -52,6 +57,7 @@ func randInt(min, max int) int {
 	return min + rand.Intn(max-min)
 }
 
+// mixPasswordSale
 func mixPasswordSalt(pwd, salt string) string {
 	len_p, len_s := len(pwd), len(salt)
 	len_mix := len_p + len_s
@@ -80,6 +86,7 @@ func mixPasswordSalt(pwd, salt string) string {
 	return string(mixture)
 }
 
+// GenPasswordHash
 func GenPasswordHash(pwd, salt string) string {
 	h := sha256.New()
 	mix := mixPasswordSalt(pwd, salt)
