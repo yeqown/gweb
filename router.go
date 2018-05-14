@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"sync"
 
-	. "gweb/logger"
-	"gweb/middleware"
-	. "gweb/utils"
+	. "github.com/yeqown/gweb/logger"
+	"github.com/yeqown/gweb/middleware"
+	. "github.com/yeqown/gweb/utils"
 )
 
 func init() {

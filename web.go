@@ -6,8 +6,8 @@
 package gweb
 
 import (
-	. "gweb/logger"
-	. "gweb/utils"
+	. "github.com/yeqown/gweb/logger"
+	. "github.com/yeqown/gweb/utils"
 
 	"net"
 	"net/http"

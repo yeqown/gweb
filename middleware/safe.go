@@ -4,7 +4,7 @@
 package middleware
 
 import (
-	. "gweb/logger"
+	. "github.com/yeqown/gweb/logger"
 	"net/http"
 )
 

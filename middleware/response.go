@@ -8,8 +8,8 @@ import (
 	"io"
 	"net/http"
 
-	. "gweb/logger"
-	. "gweb/utils"
+	. "github.com/yeqown/gweb/logger"
+	. "github.com/yeqown/gweb/utils"
 )
 
 // base response s to client

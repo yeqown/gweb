@@ -14,8 +14,8 @@ import (
 	"reflect"
 	"sync"
 
-	. "gweb/logger"
-	"gweb/utils"
+	. "github.com/yeqown/gweb/logger"
+	"github.com/yeqown/gweb/utils"
 	// "github.com/yeqown/gweb"
 )
 

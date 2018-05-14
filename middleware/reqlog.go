@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/url"
 
-	. "gweb/logger"
-	"gweb/utils"
+	. "github.com/yeqown/gweb/logger"
+	"github.com/yeqown/gweb/utils"
 )
 
 func logReq(req *http.Request) {
