@@ -1,5 +1,6 @@
 # gweb
-	golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
+ golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
+
 
 * [Using](#using)
 * [Validation](#validation)
@@ -116,46 +117,36 @@ type Person struct {
 
 ```shell
 # tree -L 2
-	.
-	├── LICENSE
-	├── README.md
-	├── constant
-	│   ├── code.go
-	│   └── code_test.go
-	├── controllers
-	│   ├── default.go
-	│   └── hello.go
-	├── logger
-	│   └── logger.go
-	├── logs
-	│   ├── app.log
-	│   └── request.log
-	├── mainC
-	│   ├── conf.go
-	│   ├── db.go
-	│   ├── main.go
-	│   └── web.go
-	├── models
-	│   ├── connect.go
-	│   ├── mysql_demo.go
-	│   ├── postgres_demo.go
-	│   └── redis_demo.go
-	├── router
-	│   ├── middleware
-	│   └── router.go
-	├── sample
-	│   └── main.go
-	├── services
-	├── utils
-	│   └── uuid.go
-	└── vendor
-	    ├── github.com
-	    └── manifest
+.
+├── LICENSE
+├── README.md
+├── conf.go
+├── http_handler.go
+├── logger
+│   └── logger.go
+├── middleware
+│   ├── param.go
+│   ├── readme.md
+│   ├── reqlog.go
+│   ├── response.go
+│   └── safe.go
+├── router.go
+├── utils
+│   ├── code.go
+│   ├── code_test.go
+│   ├── string.go
+│   ├── string_test.go
+│   ├── uuid.go
+│   └── uuid_test.go
+├── vendor
+│   ├── github.com
+│   └── manifest
+└── web.go
 ```
 
 ## manifest
 
-> go deps managed by gvt
+go deps managed by gvt
 
 ```json
 {
@@ -168,14 +159,6 @@ type Person struct {
 			"revision": "f16688817aa428d10361394015b40d096b680542",
 			"branch": "master",
 			"path": "/validation",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/denisenkom/go-mssqldb",
-			"repository": "https://github.com/denisenkom/go-mssqldb",
-			"vcs": "git",
-			"revision": "e32faac87a2220f9342289f2c3b567d1424b8ec5",
-			"branch": "master",
 			"notests": true
 		},
 		{
@@ -204,5 +187,4 @@ type Person struct {
 		}
 	]
 }
-
 ```
