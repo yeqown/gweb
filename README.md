@@ -18,7 +18,7 @@ cd mainC
 go run *
 ```
 
-Link to [sample](https://github.com/yeqown/gweb-sample)
+Link to [sample](https://github.com/yeqown/gweb-usage-smaples)
 
 ## validation
 
