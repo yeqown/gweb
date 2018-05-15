@@ -16,6 +16,8 @@ var (
 	AppL = L.NewLogger()
 )
 
+// InitLogger with logPath to set in which folder log files
+// are saved
 func InitLogger(logPath string) {
 	var err error
 	if logPath, err = filepath.Abs(logPath); err != nil {

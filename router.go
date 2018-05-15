@@ -103,15 +103,15 @@ Found:
 // }
 
 type Route struct {
-	Path    string
-	Method  string
-	Fn      interface{}
-	ReqPool *sync.Pool
-	ResPool *sync.Pool
+	Path    string      // Route Path
+	Method  string      // Route Method
+	Fn      interface{} // Route Fn
+	ReqPool *sync.Pool  // Route ReqPool
+	ResPool *sync.Pool  // Route ResPool
 }
 
 func AddRoute(r *Route) {
-	AppL.Infof("Adding route: %s %s", r.Path, r.Method)
+	AppL.Infof("Adding route: %s %s", r.Method, r.Path)
 	if _, ok := Routes[r.Path]; !ok {
 		Routes[r.Path] = []*Route{}
 	}

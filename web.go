@@ -18,17 +18,19 @@ import (
 
 var rpc_server = rpc.NewServer()
 
-// StartServer over HTTP as for api server
-func StartServer() {
+// StartHttpServer over HTTP as for api server
+func StartHttpServer(servConfig *ServerConfig) {
+	InitLogger(servConfig.Logpath)
+
 	server := &http.Server{
-		Addr: Fstring(":%d", _instance.ServerC.Port),
+		Addr: Fstring(":%d", servConfig.Port),
 		Handler: http.TimeoutHandler(ApiHdl,
 			5*time.Second,
 			TimeoutJsonResp,
 		),
 	}
 
-	AppL.Infof("Http Server listening on: %d\n", _instance.ServerC.Port)
+	AppL.Infof("Http Server listening on: %d\n", servConfig.Port)
 	if err := server.ListenAndServe(); err != nil {
 		AppL.Fatal(err.Error())
 	}
@@ -41,22 +43,22 @@ func GetRpcServer() *rpc.Server {
 
 // StartRpcSerevr running a server to deal with rpc request
 // default set jsonrpc
-func StartRpcServer() {
+func StartRpcServer(rpcConfig *RpcServerConfig) {
 	// DefaultRPCPath = "/_goRPC_"
 	// DefaultDebugPath = "/debug/rpc"
 	rpc_server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
 
-	l, err := net.Listen(_instance.RpcC.Network,
+	l, err := net.Listen(rpcConfig.Network,
 		Fstring("%s:%d",
-			_instance.RpcC.Host,
-			_instance.RpcC.Port,
+			rpcConfig.Host,
+			rpcConfig.Port,
 		),
 	)
 	if err != nil {
 		AppL.Fatal(err.Error())
 	}
 
-	AppL.Infof("Json-Rpc Listening on: %d\n", _instance.RpcC.Port)
+	AppL.Infof("Json-Rpc Listening on: %d\n", rpcConfig.Port)
 	// loop listening
 	for {
 		conn, err := l.Accept()
