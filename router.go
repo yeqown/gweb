@@ -13,8 +13,8 @@ import (
 
 func init() {
 	// set other handler
-	ApiHdl.NotFound = NfController
-	ApiHdl.MethodNotAllowed = MnaController
+	ApiHdl.NotFound = nfController
+	ApiHdl.MethodNotAllowed = mnaController
 }
 
 type ApiHandler struct {

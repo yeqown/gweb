@@ -1,6 +1,3 @@
-// Package middleware include param, reqlog, response, safe
-// related functional modules
-// current safe.go mainly recover while panic err hanppening
 package middleware
 
 import (
@@ -8,7 +5,7 @@ import (
 	"net/http"
 )
 
-// recover from panic
+// SafeHandler recover from panic
 // will be used in `Handler.ServeHTTP`
 func SafeHandler(w http.ResponseWriter, req *http.Request) {
 	if err, ok := recover().(error); ok {

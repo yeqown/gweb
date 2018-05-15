@@ -1,6 +1,5 @@
 // Package gweb
 // Support HTTP Server, restful api handler, with timeout setting
-//
 // Support RPC Server, but this only called by golang rpc client,
 // not good enough
 package gweb

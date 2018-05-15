@@ -66,10 +66,7 @@ func NewCodeInfo(code int, message string) *CodeInfo {
 	return ci
 }
 
-/*
- * @i interface{} - interface with field `CodeInfo`
- * @ci *CodeInfo - fill i with this CodeInfo
- */
+// to fill i with CodeInfo. i must hae Field CodeInfo
 func Response(i interface{}, ci *CodeInfo) {
 	v := reflect.ValueOf(i).Elem()
 	// i must be a struct type data

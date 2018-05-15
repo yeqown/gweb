@@ -1,6 +1,3 @@
-// Package middleware include param, reqlog, response, safe
-// related functional modules
-// current repsonse.go mainly deal response data to client
 package middleware
 
 import (
@@ -12,7 +9,7 @@ import (
 	. "github.com/yeqown/gweb/utils"
 )
 
-// base response s to client
+// response s to client
 func response(w http.ResponseWriter, s string) {
 	ReqL.Info(s)
 	_, err := io.WriteString(w, s)

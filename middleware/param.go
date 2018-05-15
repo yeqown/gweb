@@ -1,6 +1,5 @@
 // Package middleware include param, reqlog, response, safe
 // related functional modules
-// current safe.go mainly parse and valid `Request.Form`
 package middleware
 
 import (
@@ -19,12 +18,11 @@ import (
 	// "github.com/yeqown/gweb"
 )
 
+// ParamFile to save file from request
 type ParamFile struct {
 	File       multipart.File
 	FileHeader multipart.FileHeader
 }
-
-// type ParamFiles map[string]ParamFile
 
 // ParamError include Field, Value, Message
 type ParamError struct {
@@ -33,13 +31,12 @@ type ParamError struct {
 	Message string      `json:"message"`
 }
 
-type ParamErrors []*ParamError
-
 // String of ParamError, to format as string
 func (pe *ParamError) String() string {
 	return utils.Fstring("field-[%s], invalid with value-[%s], tip: [%s]", pe.Field, pe.Value, pe.Message)
 }
 
+// Error stringfiy ParamError
 func (pe *ParamError) Error() string {
 	return pe.String()
 }
@@ -62,6 +59,7 @@ func NewParamErrorFromValidError(ve *valid.Error) *ParamError {
 	}
 }
 
+// Errors saved errs in valid.Error type
 type Errors []*valid.Error
 
 var poolValid = &sync.Pool{
@@ -77,7 +75,7 @@ var decoder = schema.NewDecoder()
 // ParseParams, parse params into reqRes from req.Form, and support
 // form-data, json-body
 // TODO: support parse file
-func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (errs ParamErrors) {
+func ParseParams(w http.ResponseWriter, req *http.Request, reqRes interface{}) (errs []*ParamError) {
 	switch req.Method {
 	case http.MethodGet:
 		req.ParseForm()

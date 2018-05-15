@@ -1,6 +1,3 @@
-// Package middleware include param, reqlog, response, safe
-// related functional modules
-// current safe.go mainly log each request
 package middleware
 
 import (
@@ -17,6 +14,7 @@ func logReq(req *http.Request) {
 	ReqL.Info(reqlog)
 }
 
+// RequestLog to log http.Request values
 func RequestLog(req *http.Request) string {
 	return utils.Fstring("Path: [%s], Method: [%s], Headers: [%s], Form: [%s]",
 		req.URL.Path,

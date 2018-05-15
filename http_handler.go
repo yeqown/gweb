@@ -5,23 +5,23 @@ import (
 )
 
 type (
-	NfHandler  int
-	MnaHandler int
+	_404Handler int
+	_405Handler int
 )
 
 var (
-	NfController  *NfHandler  // not found handler
-	MnaController *MnaHandler // method not allowed
+	nfController  *_404Handler // not found handler
+	mnaController *_405Handler // method not allowed
 )
 
-func (n *NfHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (n *_404Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// ci := NewCodeInfo(CodeNotFound, "")
 	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 	// middleware.ResponseJson(w)
 	// WriteErrResp(w, http.StatusNotFound, ci.Code, ci.Message)
 }
 
-func (m *MnaHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (m *_405Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// ci := NewCodeInfo(CodeMethodNotAllowed, "")
 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	// WriteErrResp(w, http.StatusMethodNotAllowed, ci.Code, ci.Message)
