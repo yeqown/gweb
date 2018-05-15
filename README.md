@@ -1,4 +1,4 @@
-# gweb
+# Gweb
  golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
 
 
@@ -6,22 +6,11 @@
 * [Validation](#validation)
 * [Decoder](#decoder)
 
-## using
+## Samples
 
-```shell
-git clone git@github.com:yeqown/gweb.git
-cd gweb
-gvt restore # if not installed, go get github.com/FiloSottile/gvt
+Link to [gweb-usage-samples](https://github.com/yeqown/gweb-usage-smaples)
 
-# do some change, then
-
-cd mainC
-go run *
-```
-
-Link to [sample](https://github.com/yeqown/gweb-usage-smaples)
-
-## validation
+## Validation
 
 > ref to github.com/astaxie/beego/validation
 
@@ -98,7 +87,7 @@ StructTag 可用的验证函数：
 * `ZipCode` 邮政编码，有效类型：`string`，其他类型都将不能通过验证
 
 
-## decoder
+## Decoder
 
 > ref to github.com/gorilla/schema
 
@@ -113,7 +102,7 @@ type Person struct {
 }
 ```
 
-## file-tree
+## File tree
 
 ```shell
 # tree -L 2
