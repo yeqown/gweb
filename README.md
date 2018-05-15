@@ -1,10 +1,11 @@
 # Gweb
- golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
+	golang web frame, maybe a frame ~, mainly to less preparing-works while starting a web server
 
-
-* [Using](#using)
-* [Validation](#validation)
-* [Decoder](#decoder)
+doc ref to: [https://godoc.org/github.com/yeqown/gweb](https://godoc.org/github.com/yeqown/gweb)
+ 
+*[Using](#using)*
+*[Validation](#validation)*
+*[Decoder](#decoder)*
 
 ## Samples
 
