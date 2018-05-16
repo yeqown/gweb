@@ -19,29 +19,28 @@ type RpcServerConfig struct {
 	Network   string `json:"network"`    // RpcServer Newwork
 }
 
-// type Config struct {
-// 	ServerC *ServerConfig    `json:"ServerConfig"`
-// 	RpcC    *RpcServerConfig `json:"RpcServerConfig"`
-// }
+type MysqlConfig struct {
+	Addr      string `json:"Addr"`
+	Loc       string `json:"Loc"`
+	Charset   string `json:"Charset"`
+	Pool      int    `json:"pool"`
+	ParseTime string `json:"ParseTime"`
+}
 
-// var _instance *Config
+type MongoConfig struct {
+	Addrs     string `json:"Addrs"`
+	Timeout   int64  `json:"Timeout"`
+	PoolLimit int    `json:"PoolLimit"`
+}
 
-// // GetInstance get global config instance
-// func GetInstance() *Config {
-// 	return _instance
-// }
-
-// // LoadConfig read config.json file and pares to
-// // Golang Struct config instance varible
-// func LoadConfig(filepath string) error {
-// 	fp, err := os.Open(filepath)
-// 	defer fp.Close()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	body, _ := bufio.NewReader(fp).ReadBytes(0)
-// 	if err = json.Unmarshal(body, &_instance); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+type RedisConfig struct {
+	Addr        string `json:"Addr"`
+	DB          int    `json:"DB"`
+	Password    string `json:"Password"`
+	PoolSize    int    `json:"PoolSize"`
+	Timeout     int    `json:"Timeout"`
+	MaxActive   int    `json:"MaxActive"`
+	MaxIdle     int    `json:"MaxIdle"`
+	IdleTimeout int    `json:"IdleTimeout"`
+	Wait        bool   `json:"Wait"`
+}
