@@ -18,6 +18,23 @@ import (
 	// "github.com/yeqown/gweb"
 )
 
+var (
+	decoder   = schema.NewDecoder()
+	poolValid = &sync.Pool{
+		New: func() interface{} {
+			return &valid.Validation{RequiredFirst: true}
+		},
+	}
+)
+
+func init() {
+	// IgnoreUnknownKeys controls the behaviour when the decoder encounters unknown keys in the map.
+	// If i is true and an unknown field is encountered, it is ignored.
+	// If i is false then Decode will return an error.
+	// To preserve backwards compatibility, the default value is false.
+	decoder.IgnoreUnknownKeys(true)
+}
+
 // ParamFile to save file from request
 type ParamFile struct {
 	File       multipart.File
@@ -61,16 +78,6 @@ func NewParamErrorFromValidError(ve *valid.Error) *ParamError {
 
 // Errors saved errs in valid.Error type
 type Errors []*valid.Error
-
-var poolValid = &sync.Pool{
-	New: func() interface{} {
-		return &valid.Validation{
-			RequiredFirst: true,
-		}
-	},
-}
-
-var decoder = schema.NewDecoder()
 
 // ParseParams, parse params into reqRes from req.Form, and support
 // form-data, json-body
