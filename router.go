@@ -32,12 +32,21 @@ var (
 	ApiHdl       = &ApiHandler{}
 	Routes       = map[string][]*Route{}
 	assRoutesMap = map[string]bool{} // check method not allowed
+	openSafe     = false             // safe hanlder switch
+
 	// FileHdl *FileHanlder
 )
 
+// Open or Close safe handler to recover from panic err
+func OpenSafeHanlder(isOpen bool) {
+	openSafe = isOpen
+}
+
 func (a *ApiHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
-	defer middleware.SafeHandler(w, req)
+	if openSafe {
+		defer middleware.SafeHandler(w, req)
+	}
 
 	path := req.URL.Path
 	route, ok := foundRoute(path, req.Method)
