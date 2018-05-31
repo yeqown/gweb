@@ -18,8 +18,10 @@ func init() {
 }
 
 type ApiHandler struct {
-	NotFound         http.Handler
-	MethodNotAllowed http.Handler
+	NotFound           http.Handler
+	MethodNotAllowed   http.Handler
+	ServeHttpEntryHook http.HandlerFunc // entryHookFunc
+	ServeHttpDoneHook  http.HandlerFunc // doneHookFunc
 }
 
 // JsonErr Includes `Errs` field which contains interface{} value
@@ -43,6 +45,15 @@ func OpenSafeHanlder(isOpen bool) {
 }
 
 func (a *ApiHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	// call done hook
+	if a.ServeHttpDoneHook != nil {
+		defer a.ServeHttpDoneHook(w, req)
+	}
+
+	// call entry hook
+	if a.ServeHttpEntryHook != nil {
+		a.ServeHttpEntryHook(w, req)
+	}
 
 	if openSafe {
 		defer middleware.SafeHandler(w, req)
@@ -107,6 +118,18 @@ Found:
 	return
 }
 
+// SetEntryHook to set the `http.HanlderFunc`
+// but to remember, you'd not want to read the body directly,
+// if you must, copy from the request, and op the copy
+func SetEntryHook(fn http.HandlerFunc) {
+	ApiHdl.ServeHttpEntryHook = fn
+}
+
+// SetDoneHook to set the `http.HanlderFunc`
+func SetDoneHook(fn http.HandlerFunc) {
+	ApiHdl.ServeHttpDoneHook = fn
+}
+
 // func (f *FileHanlder) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 // 	http.FileServer(http.Dir("/User/yeqiang"))
 // }
@@ -119,6 +142,7 @@ type Route struct {
 	ResPool *sync.Pool  // Route ResPool
 }
 
+// AddRoute to gweb ApiHandler
 func AddRoute(r *Route) {
 	AppL.Infof("Adding route: %s %s", r.Method, r.Path)
 	if _, ok := Routes[r.Path]; !ok {
