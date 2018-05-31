@@ -17,13 +17,6 @@ func init() {
 	ApiHdl.MethodNotAllowed = mnaController
 }
 
-type ApiHandler struct {
-	NotFound           http.Handler
-	MethodNotAllowed   http.Handler
-	ServeHttpEntryHook http.HandlerFunc // entryHookFunc
-	ServeHttpDoneHook  http.HandlerFunc // doneHookFunc
-}
-
 // JsonErr Includes `Errs` field which contains interface{} value
 type JsonErr struct {
 	CodeInfo
@@ -44,15 +37,29 @@ func OpenSafeHanlder(isOpen bool) {
 	openSafe = isOpen
 }
 
+type HandleEntryFunc func(w http.ResponseWriter, req *http.Request) *CodeInfo
+
+type ApiHandler struct {
+	NotFound           http.Handler
+	MethodNotAllowed   http.Handler
+	ServeHttpEntryHook HandleEntryFunc  // entryHookFunc
+	ServeHttpDoneHook  http.HandlerFunc // doneHookFunc
+	// ServeHttpEntryHook http.HandlerFunc // entryHookFunc
+}
+
 func (a *ApiHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// call done hook
 	if a.ServeHttpDoneHook != nil {
 		defer a.ServeHttpDoneHook(w, req)
 	}
 
-	// call entry hook
-	if a.ServeHttpEntryHook != nil {
-		a.ServeHttpEntryHook(w, req)
+	// call entry hook, be sure w is not closed
+	if a.ServeHttpEntryHook != nil && true {
+		ci := a.ServeHttpEntryHook(w, req)
+		if ci != nil && ci.Code != CodeOk {
+			middleware.ResponseJson(w, ci)
+			return
+		}
 	}
 
 	if openSafe {
@@ -121,7 +128,7 @@ Found:
 // SetEntryHook to set the `http.HanlderFunc`
 // but to remember, you'd not want to read the body directly,
 // if you must, copy from the request, and op the copy
-func SetEntryHook(fn http.HandlerFunc) {
+func SetEntryHook(fn HandleEntryFunc) {
 	ApiHdl.ServeHttpEntryHook = fn
 }
 
