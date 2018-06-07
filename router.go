@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strings"
 	"sync"
 
 	. "github.com/yeqown/gweb/logger"
@@ -11,10 +12,23 @@ import (
 	. "github.com/yeqown/gweb/utils"
 )
 
+var (
+	ApiHdl             = &ApiHandler{}         // ApiHandler
+	Routes             = map[string][]*Route{} // Routes
+	assRoutesMap       = map[string]bool{}     // check method not allowed
+	openSafe           = false                 // safe hanlder switch
+	fileHanlderPattern = "/file"               // FileHanlder Pattern
+	fileHandler        http.Handler            // FileHanlder
+)
+
 func init() {
-	// set other handler
 	ApiHdl.NotFound = nfController
 	ApiHdl.MethodNotAllowed = mnaController
+}
+
+func SetFileHanlder(pattern, path string) {
+	fileHanlderPattern = pattern
+	fileHandler = http.StripPrefix(pattern, http.FileServer(http.Dir(path)))
 }
 
 // JsonErr Includes `Errs` field which contains interface{} value
@@ -22,15 +36,6 @@ type JsonErr struct {
 	CodeInfo
 	Errs interface{} `json:"errs"`
 }
-
-var (
-	ApiHdl       = &ApiHandler{}
-	Routes       = map[string][]*Route{}
-	assRoutesMap = map[string]bool{} // check method not allowed
-	openSafe     = false             // safe hanlder switch
-
-	// FileHdl *FileHanlder
-)
 
 // Open or Close safe handler to recover from panic err
 func OpenSafeHanlder(isOpen bool) {
@@ -44,10 +49,17 @@ type ApiHandler struct {
 	MethodNotAllowed   http.Handler
 	ServeHttpEntryHook HandleEntryFunc  // entryHookFunc
 	ServeHttpDoneHook  http.HandlerFunc // doneHookFunc
-	// ServeHttpEntryHook http.HandlerFunc // entryHookFunc
 }
 
 func (a *ApiHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	path := req.URL.Path
+
+	// call filehanlder
+	if fileHandler != nil && strings.HasPrefix(path, fileHanlderPattern) {
+		fileHandler.ServeHTTP(w, req)
+		return
+	}
+
 	// call done hook
 	if a.ServeHttpDoneHook != nil {
 		defer a.ServeHttpDoneHook(w, req)
@@ -62,11 +74,11 @@ func (a *ApiHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// if open safe-handler
 	if openSafe {
 		defer middleware.SafeHandler(w, req)
 	}
 
-	path := req.URL.Path
 	route, ok := foundRoute(path, req.Method)
 
 	//// handle 404
